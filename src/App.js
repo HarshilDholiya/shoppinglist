@@ -48,7 +48,7 @@ const App = ({ signOut }) => {
     const data = {
       name: form.get("name"),
       description: form.get("description"),
-      price: form.get("price"),
+      price: form.get("price"), // new field for price
       image: image.name,
     };
     if (!!data.image) await Storage.put(data.name, image);
@@ -74,74 +74,82 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Heading level={1}>FoodItem</Heading>
+      <Heading level={1}>my Food Items</Heading>
       <View as="form" margin="3rem 0" onSubmit={createNote}>
         <Flex direction="row" justifyContent="center">
           <TextField
             name="name"
-            placeholder="Name"
-            label="Name"
+            placeholder="input Name"
+            label="Note Name"
             labelHidden
             variation="quiet"
             required
           />
           <TextField
             name="description"
-            placeholder="Description"
-            label="Description"
+            placeholder="input Description"
+            label="Note Description"
             labelHidden
             variation="quiet"
             required
           />
-           <TextField
+          <TextField
             name="price"
-            placeholder="Price"
-            label="Price"
+            placeholder="input Price"
+            label="Note Price"
             labelHidden
             variation="quiet"
             required
           />
           <View
-  name="image"
-  as="input"
-  type="file"
-  style={{ alignSelf: "end" }}
-/>
+            name="image"
+            as="input"
+            type="file"
+            style={{ alignSelf: "end" }}
+          />
           <Button type="submit" variation="primary">
-            Add Item
+            Add Food
           </Button>
         </Flex>
       </View>
-      <Heading level={2}>Current Items</Heading>
+      <Heading level={2}>Added Food</Heading>
       <View margin="3rem 0">
-      {notes.map((note) => (
-  <Flex
-    key={note.id || note.name}
-    direction="row"
-    justifyContent="center"
-    alignItems="center"
-  >
-    <Text as="strong" fontWeight={700}>
-      {note.name}
-    </Text>
-    <Text as="span">{note.description}</Text>
-    <Text as="span">{note.price}</Text>
-    {note.image && (
-      <Image
-        src={note.image}
-        alt={`visual aid for ${notes.name}`}
-        style={{ width: 400 }}
-      />
-    )}
-    <Button variation="link" onClick={() => deleteNote(note)}>
-      Delete Item
-    </Button>
-  </Flex>
+        {notes.map((note) => (
+          <Flex
+            key={note.id || note.name}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text as="strong" fontWeight={700}>
+              {note.name}
+            </Text>
+            <Text as="span">{note.description}</Text>
+            <Text as="span">{note.price}</Text>
+{note.image && (
+<Image
+             alt={note.name}
+             src={note.image}
+             objectFit="cover"
+             width="100px"
+             height="100px"
+           />
+)}
+<Button
+onClick={() => deleteNote({
+id: note.id,
+name: note.name
+})}
+variation="danger"
+>
+Delete
+</Button>
+</Flex>
 ))}
-      </View>
-      <Button onClick={signOut}>Sign Out</Button>
-    </View>
-  );
+</View>
+<Button onClick={signOut}>Sign Out</Button>
+</View>
+);
 };
 
 export default withAuthenticator(App);
